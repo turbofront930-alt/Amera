@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرحة عبدالحميد & أميرة | 15 مايو 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --bg-night: #030812;
+            --glass: rgba(255, 255, 255, 0.04);
+            --blur: blur(15px);
+            --border: 1px solid rgba(212, 175, 55, 0.2);
+            --shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-night);
+            color: white;
+            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #0a1128 0%, #030812 100%);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 1. تأثير الزجاج المشطوف (Glassmorphism) للألواح */
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: var(--border);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            box-sizing: border-box;
+            max-width: 400px;
+            width: 90%;
+            margin: 15px auto;
+        }
+
+        /* 2. تأثير تشتت النجوم عند الضغط */
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 1;
+            animation: explode 0.8s ease-out forwards;
+            box-shadow: 0 0 10px var(--gold);
+        }
+        @keyframes explode {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+        }
+
+        /* ستايل الأزرار المحدث */
+        .btn-main {
+            background: rgba(212, 175, 55, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 14px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+        }
+        .btn-main:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+        .btn-main.whatsapp { border-color: #2ecc71; color: #2ecc71; background: rgba(46, 204, 113, 0.05); }
+        .btn-main.whatsapp:hover { background: #2ecc71; color: white; box-shadow: 0 0 25px rgba(46, 204, 113, 0.4); }
+        
+        /* طبقة الباسورد والترحيب */
+        #password-layer, #intro-layer, #game-layer {
+            position: fixed; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            padding: 20px; transition: 1s ease-in-out;
+        }
+        #password-layer { z-index: 5000; background: var(--bg-night); }
+        #game-layer { z-index: 4000; background: var(--bg-night); display: none; }
+        #intro-layer { z-index: 3000; background: var(--bg-night); display: none; }
+
+        .pass-input {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px; color: white; padding: 15px; text-align: center;
+            font-size: 1.2rem; outline: none; width: 240px; margin: 20px 0;
+            font-family: 'Cairo', sans-serif; transition: 0.3s;
+        }
+        .pass-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+
+        .neon-text {
+            font-family: 'Amiri', serif; color: var(--gold);
+            animation: neon-pulse 2s infinite ease-in-out; margin: 0 0 15px 0;
+        }
+        @keyframes neon-pulse {
+            0%, 100% { text-shadow: 0 0 5px var(--gold), 0 0 10px rgba(212,175,55,0.3); }
+            50% { text-shadow: 0 0 15px var(--gold), 0 0 30px #fff, 0 0 10px rgba(212,175,55,0.5); }
+        }
+
+        /* اللعبة وصيد القلوب */
+        .game-heart {
+            position: absolute; font-size: 50px; cursor: pointer; user-select: none;
+            animation: game-fallDown 4s linear forwards; filter: drop-shadow(0 0 10px var(--gold));
+            transition: 0.3s; pointer-events: auto;
+        }
+        @keyframes game-fallDown { from { translateY(-10vh); } to { translateY(110vh); } }
+
+        /* الصفحات ومعرض الصور */
+        .page {
+            display: none; min-height: 100vh; padding: 40px 20px; box-sizing: border-box;
+            background: var(--overlay); position: relative; z-index: 1000;
+            overflow-y: auto; opacity: 0; transform: translateY(20px);
+        }
+        .page.active { display: flex; flex-direction: column; align-items: center; animation: pageIn 1s forwards; }
+        @keyframes pageIn { to { opacity: 1; transform: translateY(0); } }
+
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
+            width: 100%; max-width: 450px; margin: 25px 0;
+        }
+        .gallery-item {
+            aspect-ratio: 1; border-radius: 15px; border: var(--border);
+            overflow: hidden; box-shadow: var(--shadow); background: #000;
+        }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .gallery-item:hover img { transform: scale(1.08); }
+
+        /* العداد */
+        #countdown { display: flex; gap: 10px; margin: 25px 0; flex-wrap: wrap; justify-content: center; }
+        .time-box {
+            border: 1px solid rgba(212,175,55,0.4); padding: 12px; border-radius: 15px;
+            background: rgba(212,175,55,0.03); min-width: 65px;
+        }
+        .time-box span { display: block; font-size: 1.6rem; font-weight: 700; color: var(--gold); }
+        .time-box .label { font-size: 0.8rem; color: #aaa; margin-top: 4px; }
+
+        #stars-container { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            animation: twinkle var(--duration) infinite; opacity: 0.4;
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+    </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop preload="auto">
+    <source src="wedding-song.mp3" type="audio/mpeg">
+</audio>
+
+<div id="stars-container"></div>
+
+<div id="password-layer">
+    <div class="glass-panel">
+        <h2 style="font-family:'Amiri'; color:var(--gold); margin:0 0 10px 0;">عبدالحميد & أميرة</h2>
+        <p style="margin:0; font-size:0.9rem; color:#ccc;">برجاء إدخال رمز الدخول لرؤية المفاجأة</p>
+        <input type="text" id="passInput" class="pass-input" placeholder="اكتب كلمة السر هنا">
+        <button class="btn-main" onclick="checkPassword()">دخول 🔒</button>
+    </div>
+</div>
+
+<div id="game-layer">
+    <h1 class="neon-text" style="font-size:2.8rem;">فرحتنا تكتمل بكم</h1>
+    <div class="glass-panel" style="padding:15px 25px;">
+        <p style="margin:0 0 10px 0;">اجمع 5 قلوب ❤️ لفتح الدعوة</p>
+        <p style="font-size:1.6rem; color:var(--gold); font-weight:700; margin:0;">المتبقي: <span id="score-rem">5</span></p>
+    </div>
+</div>
+
+<div id="intro-layer">
+    <div class="rings-container">💍💎</div>
+    <h1 class="neon-text" style="font-size:3.2rem;">عبدالحميد & أميرة</h1>
+    <p style="font-size:1.1rem; color:#aaa;">ثوانٍ معدودة...</p>
+</div>
+
+<div id="p1" class="page">
+    <h1 class="neon-text">أجمل حكايتنا</h1>
+    <div class="gallery-grid">
+        <div class="gallery-item"><img src="pic1.jpg" alt="1"></div>
+        <div class="gallery-item"><img src="pic2.jpg" alt="2"></div>
+        <div class="gallery-item"><img src="pic3.jpg" alt="3"></div>
+        <div class="gallery-item"><img src="pic4.jpg" alt="4"></div>
+        <div class="gallery-item"><img src="pic5.jpg" alt="5"></div>
+        <div class="gallery-item"><img src="pic6.jpg" alt="6"></div>
+        <div class="gallery-item"><img src="pic7.jpg" alt="7"></div>
+        <div class="gallery-item"><img src="pic8.jpg" alt="8"></div>
+    </div>
+    <p style="font-style:italic; padding:0 15px; color:#ddd; max-width:400px; text-align:center;">"بين ضي النجوم وضحكة القرايب، نكتب أول سطر في مشوارنا"</p>
+    <button class="btn-main" onclick="nextPage(2)">تفاصيل اليوم المنتظر 📅</button>
+</div>
+
+<div id="p2" class="page">
+    <h1 class="neon-text">موعدنا المنتظر</h1>
+    
+    <div class="glass-panel" style="padding:15px; margin-bottom:20px;">
+        <div id="countdown">
+            <div class="time-box"><span id="days">0</span><div class="label">أيام</div></div>
+            <div class="time-box"><span id="hours">0</span><div class="label">ساعات</div></div>
+            <div class="time-box"><span id="mins">0</span><div class="label">دقائق</div></div>
+            <div class="time-box"><span id="secs">0</span><div class="label">ثواني</div></div>
+        </div>
+        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=فرحة+عبدالحميد+وأميرة&dates=20260515T160000Z/20260515T220000Z&details=ننتظركم+لمشاركتنا+الفرحة&location=قاعة+كيلوباترا،+شنشور" target="_blank" class="btn-main" style="font-size:0.8rem; padding:10px 20px; margin-top:5px;">📅 حفظ الموعد في تقويمي</a>
+    </div>
+
+    <div class="glass-panel">
+        <p style="font-size:1.2rem; font-weight:700; color:var(--gold); margin:0 0 15px 0;">التفاصيل</p>
+        <p style="margin:8px 0; display:flex; align-items:center; justify-content:center; gap:8px;">📅 الجمعة، 15 مايو 2026</p>
+        <p style="margin:8px 0; display:flex; align-items:center; justify-content:center; gap:8px;">📍 قاعة كيلوباترا، طريق شنشور</p>
+        <a href="https://goo.gl/maps/xyz" target="_blank" class="btn-main whatsapp" style="border-color:#2ecc71; color:#2ecc71; margin-top:15px; width:100%; justify-content:center;">🧭 الموقع عبر GPS</a>
+    </div>
+
+    <div style="margin-top:20px; width:100%; max-width:400px; display:flex; flex-direction:column; gap:12px;">
+        <a href="https://wa.me/رقم_واتساب_العروس_هنا?text=تم+تأكيد+الحضور+لفرحة+عبدالحميد+وأميرة..+جايين+نفرح+معاكم!+🥳" target="_blank" class="btn-main whatsapp" style="width:100%; justify-content:center;">✅ تأكيد الحضور (RSVP)</a>
+        
+        <a href="https://wa.me/رقم_واتساب_العريس_هنا?text=ألف+مبروك+عبدالحميد+وأميرة!+ربنا+يتمم+لكم+على+خير" target="_blank" class="btn-main" style="width:100%; justify-content:center; border-color:#fff; color:#fff;">✍️ إرسال تهنئة</a>
+        
+        <a href="https://wa.me/?text=شاركونا+فرحة+عبدالحميد+وأميرة+عبر+هذا+الرابط:++https://turbofront930-alt.github.io/Wedding-invitation-me0/" target="_blank" class="btn-main" style="width:100%; justify-content:center;">🔗 مشاركة الرابط</a>
+    </div>
+</div>
+
+<script>
+    let score = 0;
+    const targetDate = new Date('2026-05-15T19:00:00');
+
+    // 2. تأثير تشتت النجوم عند الضغط
+    document.addEventListener('click', (e) => {
+        if(e.target.closest('.btn-main, .gallery-item')) return; // تجاهل الضغط على الأزرار
+        for (let i = 0; i < 8; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = e.pageX + 'px';
+            sparkle.style.top = e.pageY + 'px';
+            const x = (Math.random() - 0.5) * 150;
+            const y = (Math.random() - 0.5) * 150;
+            sparkle.style.setProperty('--x', x + 'px');
+            sparkle.style.setProperty('--y', y + 'px');
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 800);
+        }
+    });
+
+    function checkPassword() {
+        if (document.getElementById('passInput').value.trim() === "بحبك") {
+            fadeOut('password-layer');
+            setTimeout(startGame, 1000);
+        } else {
+            alert("كلمة السر خطأ! حاول مرة أخرى");
+            document.getElementById('passInput').value = "";
+        }
+    }
+
+    function startGame() {
+        document.getElementById('game-layer').style.display = 'flex';
+        const gameInterval = setInterval(() => {
+            if (score >= 5) { clearInterval(gameInterval); return; }
+            createHeart();
+        }, 800);
+    }
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.className = 'game-heart';
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 80 + 5 + 'vw';
+        heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+        heart.onclick = function() {
+            score++;
+            document.getElementById('score-rem').innerText = 5 - score;
+            this.style.transform = 'scale(2.5)';
+            this.style.opacity = '0';
+            this.style.pointerEvents = 'none';
+            if (score >= 5) finishGame();
+        };
+        document.getElementById('game-layer').appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+    }
+
+    function finishGame() {
+        fadeOut('game-layer');
+        setTimeout(() => {
+            document.getElementById('intro-layer').style.display = 'flex';
+            setTimeout(showMainPage, 3000);
+        }, 1000);
+    }
+
+    function showMainPage() {
+        fadeOut('intro-layer');
+        setTimeout(() => {
+            document.getElementById('p1').classList.add('active');
+            playMusic();
+            document.body.style.overflowY = 'auto'; // السماح بالتمرير
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        }, 1000);
+    }
+
+    function playMusic() {
+        const music = document.getElementById('bgMusic');
+        music.play().catch(e => console.log("التشغيل التلقائي محجوب"));
+    }
+
+    function updateCountdown() {
+        const diff = targetDate - new Date();
+        if (diff > 0) {
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            document.getElementById('mins').innerText = Math.floor((diff / 1000 / 60) % 60);
+            document.getElementById('secs').innerText = Math.floor((diff / 1000) % 60);
+        }
+    }
+
+    function fadeOut(id) {
+        document.getElementById(id).style.opacity = '0';
+        setTimeout(() => document.getElementById(id).style.display = 'none', 1000);
+    }
+
+    function nextPage(n) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('p' + n).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // توليد النجوم
+    const sCon = document.getElementById('stars-container');
+    for (let i = 0; i < 70; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        s.style.width = s.style.height = Math.random() * 2.5 + 'px';
+        s.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+        sCon.appendChild(s);
+    }
+</script>
+</body>
+</html>
